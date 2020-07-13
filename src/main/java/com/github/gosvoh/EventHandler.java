@@ -1,41 +1,71 @@
 package com.github.gosvoh;
 
+import com.github.gosvoh.config.GetExpForEverythingConfig;
 import net.minecraft.block.Block;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
         Block target = event.getState().getBlock();
 
-        boolean condition = !(target instanceof LeavesBlock) &&
-                            !(target instanceof BushBlock);
+        //noinspection ConstantConditions
+        if (GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString()))
+            return;
+        for (ResourceLocation resourceLocation : target.getTags())
+            if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString()))
+                return;
 
-        LOGGER.debug(condition);
+        Reference.countOfBrokenBlocks++;
 
-        if (!event.isCanceled())
-            Constants.countOfBreakBlocks++;
+        if (Reference.countOfBrokenBlocks == GetExpForEverythingConfig.blocksNeedToDestroy) {
 
-        if (Constants.countOfBreakBlocks == ConfigHandler.CLIENT.blocksNeedToDestroy.get()) {
+            if (player.experienceLevel < GetExpForEverythingConfig.levelStep)
+                event.setExpToDrop(GetExpForEverythingConfig.baseExpToGain);
+            else
+                event.setExpToDrop(GetExpForEverythingConfig.baseExpToGain *
+                                   (player.experienceLevel / GetExpForEverythingConfig.levelStep * GetExpForEverythingConfig.multiplierForLevelStep));
 
-            event.setExpToDrop(ConfigHandler.CLIENT.baseExpToGain.get() *
-                               ConfigHandler.CLIENT.multiplierForLevelStep.get() *
-                               (player.experienceLevel / ConfigHandler.CLIENT.levelStep.get() + 1));
+            Reference.countOfBrokenBlocks = 0;
 
-            Constants.countOfBreakBlocks = 0;
+        }
+    }
 
+    @SubscribeEvent
+    public static void onCraft(PlayerEvent.ItemCraftedEvent event) {
+        PlayerEntity player = event.getPlayer();
+        Item target = event.getCrafting().getItem();
+
+        if (!Thread.currentThread().getThreadGroup().getName().equals("SERVER"))
+            return;
+        //noinspection ConstantConditions
+        if (GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString()))
+            return;
+        for (ResourceLocation resourceLocation : target.getTags())
+            if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString()))
+                return;
+
+        Reference.countOfCraftedItems++;
+
+        if (Reference.countOfCraftedItems == GetExpForEverythingConfig.countOfCraftedItems) {
+
+            if (player.experienceLevel < GetExpForEverythingConfig.levelStep)
+                player.giveExperiencePoints(GetExpForEverythingConfig.baseExpToGain);
+            else
+                player.giveExperiencePoints(GetExpForEverythingConfig.baseExpToGain *
+                                            (player.experienceLevel / GetExpForEverythingConfig.levelStep *
+                                             GetExpForEverythingConfig.multiplierForLevelStep));
+
+            Reference.countOfCraftedItems = 0;
         }
     }
 }
