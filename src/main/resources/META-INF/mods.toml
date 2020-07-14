@@ -26,11 +26,7 @@ displayName="Get experience for everything!" #mandatory
 authors="gosvoh" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-This is a long form description of the mod. You can write whatever you want here
-
-Have some lorem ipsum.
-
-elit.
+This mod allows you get a small amount of experience points by mining and crafting.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.getexpforeverything]] #optional
