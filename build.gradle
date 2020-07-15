@@ -13,10 +13,12 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0'
+version = '1.15.2'
 group = 'com.github.gosvoh.getexpforeverything' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = 'getexpforeverything'
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
@@ -74,6 +76,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            //noinspection GroovyAssignabilityCheck
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -116,11 +119,11 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "getexpforeverything",
-            "Specification-Vendor": "getexpforeverythingsareus",
+            "Specification-Vendor": "gosvoh",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"getexpforeverythingsareus",
+            "Implementation-Vendor" :"gosvoh",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

@@ -2,7 +2,6 @@ package com.github.gosvoh;
 
 import com.github.gosvoh.config.ConfigHolder;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
