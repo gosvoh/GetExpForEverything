@@ -3,12 +3,12 @@
   "modid": "getexpforeverything",
   "name": "Get experience for everything!",
   "description": "This mod allows you get a small amount of experience points by mining and crafting.",
-  "version": "${version}",
+  "version": "1.12.2",
   "mcversion": "${mcversion}",
   "url": "https://github.com/gosvoh/GetExpForEverything",
   "updateUrl": "",
   "authorList": ["gosvoh"],
-  "logoFile": "",
+  "logoFile": "/logoFile.jpeg",
   "screenshots": [],
   "dependencies": []
 }
