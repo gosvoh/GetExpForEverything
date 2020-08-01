@@ -1,7 +1,7 @@
 package com.github.gosvoh.event;
 
-import com.github.gosvoh.utils.Reference;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
+import com.github.gosvoh.utils.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,9 +19,17 @@ public class EventHandler {
         EntityPlayer player = event.getPlayer();
         Block target = event.getState().getBlock();
 
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+            return;
+
+        boolean isFoundSomething = false;
+
         for (String s : GetExpForEverythingConfig.blackListBlocks)
             //noinspection ConstantConditions
-            if (s.equals(target.getRegistryName().toString())) return;
+            if (s.equals(target.getRegistryName().toString())) isFoundSomething = true;
+
+        if ((GetExpForEverythingConfig.isBlockWhitelistMode && !isFoundSomething) ||
+            (!GetExpForEverythingConfig.isBlockWhitelistMode && isFoundSomething)) return;
 
         Reference.countOfBrokenBlocks++;
 
@@ -46,13 +54,18 @@ public class EventHandler {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient())
             return;
 
+        boolean isFoundSomething = false;
+
         for (String s : GetExpForEverythingConfig.blackListCraftedItems)
             //noinspection ConstantConditions
-            if (s.equals(target.getRegistryName().toString())) return;
+            if (s.equals(target.getRegistryName().toString())) isFoundSomething = true;
+
+        if ((GetExpForEverythingConfig.isItemWhitelistMode && !isFoundSomething) ||
+            (!GetExpForEverythingConfig.isItemWhitelistMode && isFoundSomething)) return;
 
         Reference.countOfCraftedItems++;
 
-        if (Reference.countOfCraftedItems == GetExpForEverythingConfig.countOfCraftedItems) {
+        if (Reference.countOfCraftedItems == GetExpForEverythingConfig.itemsNeedToCraft) {
 
             if (player.experienceLevel < GetExpForEverythingConfig.levelStep)
                 player.addExperience(GetExpForEverythingConfig.baseExpToGain);

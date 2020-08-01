@@ -18,7 +18,7 @@ public class GetExpForEverythingConfig {
 
     @Config.Comment("How much items you have to craft to get experience (default: 100)")
     @Config.RangeInt(min = 1)
-    public static int countOfCraftedItems = 100;
+    public static int itemsNeedToCraft = 100;
 
     @Config.Comment("How much base experience you will get (default: 1)")
     @Config.RangeInt(min = 1, max = 1000)
@@ -52,12 +52,21 @@ public class GetExpForEverythingConfig {
     @Config.Comment("Blacklisted items, that won't give you experience")
     public static String[] blackListCraftedItems = {Items.STICK.getRegistryName().toString()};
 
+    @Config.Comment("This trigger converts your block blacklists to whitelists if true (default: false)")
+    public static boolean isBlockWhitelistMode = false;
+
+    @Config.Comment("This trigger converts your item blacklists to whitelists if true (default: false)")
+    public static boolean isItemWhitelistMode = false;
+
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
     private static class ConfigChangedEventHandler {
         @SubscribeEvent
         public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-            if (event.getModID().equals(Reference.MOD_ID)) ConfigManager.sync(Reference.MOD_ID,
-                    Config.Type.INSTANCE);
+            if (event.getModID().equals(Reference.MOD_ID)) {
+                ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
+                Reference.countOfCraftedItems = 0;
+                Reference.countOfBrokenBlocks = 0;
+            }
         }
     }
 }
