@@ -1,4 +1,4 @@
-package com.github.gosvoh;
+package com.github.gosvoh.utils;
 
 import com.github.gosvoh.config.ConfigHelper;
 import com.github.gosvoh.config.ConfigHolder;
@@ -13,7 +13,4 @@ public final class ModEventSubscriber {
     public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
         if (event.getConfig().getSpec() == ConfigHolder.COMMON_SPEC) ConfigHelper.bakeClient(event.getConfig());
     }
-
-
-
 }

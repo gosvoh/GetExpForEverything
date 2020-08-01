@@ -1,4 +1,4 @@
-package com.github.gosvoh;
+package com.github.gosvoh.utils;
 
 public class Reference {
     public static int countOfBrokenBlocks = 0;
