@@ -7,7 +7,7 @@ public final class GetExpForEverythingConfig {
     public static int baseExpToGain;
     public static int multiplierForLevelStep;
     public static int levelStep;
-    public static int countOfCraftedItems;
+    public static int itemsNeedToCraft;
     public static List<? extends String> blackListBlocks;
     public static List<? extends String> blackListCraftedItems;
     public static List<? extends String> blackListBlockTags;

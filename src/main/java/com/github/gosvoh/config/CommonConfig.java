@@ -1,6 +1,6 @@
 package com.github.gosvoh.config;
 
-import com.github.gosvoh.Reference;
+import com.github.gosvoh.utils.Reference;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -14,7 +14,7 @@ final class CommonConfig {
     final ForgeConfigSpec.IntValue baseExpToGain;
     final ForgeConfigSpec.IntValue multiplierForLevelStep;
     final ForgeConfigSpec.IntValue levelStep;
-    final ForgeConfigSpec.IntValue countOfCraftedItems;
+    final ForgeConfigSpec.IntValue itemsNeedToCraft;
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlocks;
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListCraftedItems;
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlockTags;
@@ -47,7 +47,7 @@ final class CommonConfig {
                 .defineInRange("level_step", 5, 1, 1000);
 
         desc = "How much items you have to craft to get experience (default: 100)";
-        countOfCraftedItems = builder.comment(desc)
+        itemsNeedToCraft = builder.comment(desc)
                 .defineInRange("items_to_craft", 100, 1, Integer.MAX_VALUE);
 
         desc = "Blacklisted blocks, that won't give you experience";
