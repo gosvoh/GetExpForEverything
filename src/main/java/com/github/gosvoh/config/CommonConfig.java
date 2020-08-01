@@ -19,9 +19,12 @@ final class CommonConfig {
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListCraftedItems;
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlockTags;
     final ForgeConfigSpec.ConfigValue<List<? extends String>> blackListItemTags;
+    final ForgeConfigSpec.BooleanValue isBlockWhitelistMode;
+    final ForgeConfigSpec.BooleanValue isItemWhitelistMode;
 
     CommonConfig(final ForgeConfigSpec.Builder builder) {
         String desc = Reference.MOD_NAME + " mod configuration";
+        ArrayList<String> namesArrayList;
         builder.comment(desc).push(Reference.MOD_ID);
 
         desc = "How many blocks you have to destroy to get experience (default: 100)";
@@ -51,33 +54,47 @@ final class CommonConfig {
                 .defineInRange("items_to_craft", 100, 1, Integer.MAX_VALUE);
 
         desc = "Blacklisted blocks, that won't give you experience";
-        ArrayList<String> blockArrayList = new ArrayList<>();
+        namesArrayList = new ArrayList<>();
         //noinspection ConstantConditions
-        Collections.addAll(blockArrayList,
+        Collections.addAll(namesArrayList,
                 Blocks.GRASS.getRegistryName().toString(),
                 Blocks.VINE.getRegistryName().toString(),
-                Blocks.TALL_GRASS.getRegistryName().toString());
+                Blocks.TALL_GRASS.getRegistryName().toString(),
+                Blocks.LARGE_FERN.getRegistryName().toString(),
+                Blocks.FERN.getRegistryName().toString());
+        desc = desc + "\n(default: " + namesArrayList + ")";
         blackListBlocks = builder.comment(desc)
-                .defineList("black_list_blocks", blockArrayList, o -> o instanceof String);
+                .defineList("black_list_blocks", namesArrayList, o -> o instanceof String);
 
         desc = "Blacklisted items, that won't give you experience";
-        ArrayList<String> itemArrayList = new ArrayList<>();
+        namesArrayList = new ArrayList<>();
         //noinspection ConstantConditions
-        itemArrayList.add(Items.STICK.getRegistryName().toString());
+        namesArrayList.add(Items.STICK.getRegistryName().toString());
+        desc = desc + "\n(default: " + namesArrayList + ")";
         blackListCraftedItems = builder.comment(desc)
-                .defineList("black_list_items", itemArrayList, o -> o instanceof String);
+                .defineList("black_list_items", namesArrayList, o -> o instanceof String);
 
         desc = "Blacklisted block tags, that won't give you experience";
-        ArrayList<String> blockTagArrayList = new ArrayList<>();
-        blockTagArrayList.add("minecraft:flowers");
+        namesArrayList = new ArrayList<>();
+        namesArrayList.add("minecraft:flowers");
+        desc = desc + "\n(default: " + namesArrayList + ")";
         blackListBlockTags = builder.comment(desc)
-                .defineList("black_list_item_tags", blockTagArrayList, o -> o instanceof String);
+                .defineList("black_list_item_tags", namesArrayList, o -> o instanceof String);
 
         desc = "Blacklisted item tags, that won't give you experience";
-        ArrayList<String> itemTagArrayList = new ArrayList<>();
-        itemTagArrayList.add("minecraft:planks");
+        namesArrayList = new ArrayList<>();
+        namesArrayList.add("minecraft:planks");
+        desc = desc + "\n(default: " + namesArrayList + ")";
         blackListItemTags = builder.comment(desc)
-                .defineList("black_list_block_tags", itemTagArrayList, o -> o instanceof String);
+                .defineList("black_list_block_tags", namesArrayList, o -> o instanceof String);
+
+        desc = "This trigger converts your block blacklists to whitelists if true (default: false)";
+        isBlockWhitelistMode = builder.comment(desc)
+                .define("is_block_whitelist_mode", false);
+
+        desc = "This trigger converts your item blacklists to whitelists if true (default: false)";
+        isItemWhitelistMode = builder.comment(desc)
+                .define("is_item_whitelist_mode", false);
 
         builder.pop();
     }

@@ -20,6 +20,8 @@ public final class ConfigHelper {
         GetExpForEverythingConfig.blackListCraftedItems = config.getConfigData().get(prefix + "black_list_items");
         GetExpForEverythingConfig.blackListBlockTags = config.getConfigData().get(prefix + "black_list_block_tags");
         GetExpForEverythingConfig.blackListItemTags = config.getConfigData().get(prefix + "black_list_item_tags");
+        GetExpForEverythingConfig.isBlockWhitelistMode = config.getConfigData().get(prefix + "is_block_whitelist_mode");
+        GetExpForEverythingConfig.isItemWhitelistMode = config.getConfigData().get(prefix + "is_item_whitelist_mode");
 
         Reference.countOfBrokenBlocks = 0;
         Reference.countOfCraftedItems = 0;

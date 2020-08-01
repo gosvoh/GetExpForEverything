@@ -24,12 +24,16 @@ public class EventHandler {
 
         if (player.getEntityWorld().isRemote()) return;
 
+        boolean isFoundSomething = false;
+
         //noinspection ConstantConditions
         if (GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString()))
-            return;
+            isFoundSomething = true;
         for (ResourceLocation resourceLocation : target.getTags())
-            if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString()))
-                return;
+            if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString())) isFoundSomething = true;
+
+            if ((GetExpForEverythingConfig.isBlockWhitelistMode && !isFoundSomething) ||
+                (!GetExpForEverythingConfig.isBlockWhitelistMode && isFoundSomething)) return;
 
         Reference.countOfBrokenBlocks++;
 
@@ -52,12 +56,17 @@ public class EventHandler {
         Item target = event.getCrafting().getItem();
 
         if (player.getEntityWorld().isRemote) return;
+
+        boolean isFoundSomething = false;
+
         //noinspection ConstantConditions
         if (GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString()))
-            return;
+            isFoundSomething = true;
         for (ResourceLocation resourceLocation : target.getTags())
-            if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString()))
-                return;
+            if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString())) isFoundSomething = true;
+
+        if ((GetExpForEverythingConfig.isItemWhitelistMode && !isFoundSomething) ||
+            (!GetExpForEverythingConfig.isItemWhitelistMode && isFoundSomething)) return;
 
         Reference.countOfCraftedItems++;
 

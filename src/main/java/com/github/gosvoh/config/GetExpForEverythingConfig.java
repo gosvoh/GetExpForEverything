@@ -12,4 +12,6 @@ public final class GetExpForEverythingConfig {
     public static List<? extends String> blackListCraftedItems;
     public static List<? extends String> blackListBlockTags;
     public static List<? extends String> blackListItemTags;
+    public static boolean isBlockWhitelistMode;
+    public static boolean isItemWhitelistMode;
 }
