@@ -1,6 +1,8 @@
-package com.github.gosvoh;
+package com.github.gosvoh.event;
 
+import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
+import com.github.gosvoh.utils.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -9,14 +11,18 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
+    private static final Logger LOGGER = GetExpForEverything.LOGGER;
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
         Block target = event.getState().getBlock();
+
+        if (player.getEntityWorld().isRemote()) return;
 
         //noinspection ConstantConditions
         if (GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString()))
@@ -45,8 +51,7 @@ public class EventHandler {
         PlayerEntity player = event.getPlayer();
         Item target = event.getCrafting().getItem();
 
-        if (!Thread.currentThread().getThreadGroup().getName().equals("SERVER"))
-            return;
+        if (player.getEntityWorld().isRemote) return;
         //noinspection ConstantConditions
         if (GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString()))
             return;
@@ -56,7 +61,7 @@ public class EventHandler {
 
         Reference.countOfCraftedItems++;
 
-        if (Reference.countOfCraftedItems == GetExpForEverythingConfig.countOfCraftedItems) {
+        if (Reference.countOfCraftedItems == GetExpForEverythingConfig.itemsNeedToCraft) {
 
             if (player.experienceLevel < GetExpForEverythingConfig.levelStep)
                 player.giveExperiencePoints(GetExpForEverythingConfig.baseExpToGain);
