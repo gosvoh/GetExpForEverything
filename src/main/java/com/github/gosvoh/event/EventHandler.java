@@ -1,18 +1,31 @@
 package com.github.gosvoh.event;
 
+import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
 import com.github.gosvoh.utils.Reference;
+import com.github.gosvoh.utils.SavedInfo;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class EventHandler {
+
+    private static final Logger LOGGER = GetExpForEverything.LOGGER;
+
+    @SubscribeEvent
+    public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
+        Reference.countOfBrokenBlocks = SavedInfo.loadInt(event.player, "countOfBrokenBlocks");
+        Reference.countOfCraftedItems = SavedInfo.loadInt(event.player, "countOfCraftedItems");
+    }
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -25,7 +38,6 @@ public class EventHandler {
         boolean isFoundSomething = false;
 
         for (String s : GetExpForEverythingConfig.blackListBlocks)
-            //noinspection ConstantConditions
             if (s.equals(target.getRegistryName().toString())) isFoundSomething = true;
 
         if ((GetExpForEverythingConfig.isBlockWhitelistMode && !isFoundSomething) ||
@@ -42,8 +54,9 @@ public class EventHandler {
                                    (player.experienceLevel / GetExpForEverythingConfig.levelStep * GetExpForEverythingConfig.multiplierForLevelStep));
 
             Reference.countOfBrokenBlocks = 0;
-
         }
+
+        SavedInfo.saveInt(player, "countOfBrokenBlocks", Reference.countOfBrokenBlocks);
     }
 
     @SubscribeEvent
@@ -57,7 +70,6 @@ public class EventHandler {
         boolean isFoundSomething = false;
 
         for (String s : GetExpForEverythingConfig.blackListCraftedItems)
-            //noinspection ConstantConditions
             if (s.equals(target.getRegistryName().toString())) isFoundSomething = true;
 
         if ((GetExpForEverythingConfig.isItemWhitelistMode && !isFoundSomething) ||
@@ -76,5 +88,7 @@ public class EventHandler {
 
             Reference.countOfCraftedItems = 0;
         }
+
+        SavedInfo.saveInt(player, "countOfCraftedItems", Reference.countOfCraftedItems);
     }
 }
