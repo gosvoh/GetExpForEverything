@@ -23,8 +23,8 @@ public final class ConfigHelper {
         GetExpForEverythingConfig.isBlockWhitelistMode = config.getConfigData().get(prefix + "is_block_whitelist_mode");
         GetExpForEverythingConfig.isItemWhitelistMode = config.getConfigData().get(prefix + "is_item_whitelist_mode");
 
-        Reference.countOfBrokenBlocks = 0;
-        Reference.countOfCraftedItems = 0;
+        if (Reference.countOfBrokenBlocks >= GetExpForEverythingConfig.blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
+        if (Reference.countOfCraftedItems >= GetExpForEverythingConfig.itemsNeedToCraft) Reference.countOfCraftedItems = 0;
 
         LOGGER.debug(Reference.MOD_NAME + " configuration file was changed!");
     }

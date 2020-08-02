@@ -3,7 +3,9 @@ package com.github.gosvoh.event;
 import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
 import com.github.gosvoh.utils.Reference;
+import com.github.gosvoh.utils.SavedInfo;
 import net.minecraft.block.Block;
+import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -16,6 +18,15 @@ import org.apache.logging.log4j.Logger;
 @Mod.EventBusSubscriber
 public class EventHandler {
     private static final Logger LOGGER = GetExpForEverything.LOGGER;
+
+    @SubscribeEvent
+    public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
+        Reference.countOfBrokenBlocks = SavedInfo.loadInt(event.getPlayer(), "countOfBrokenBlocks");
+        Reference.countOfCraftedItems = SavedInfo.loadInt(event.getPlayer(), "countOfCraftedItems");
+
+        if (Reference.countOfBrokenBlocks >= GetExpForEverythingConfig.blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
+        if (Reference.countOfCraftedItems >= GetExpForEverythingConfig.itemsNeedToCraft) Reference.countOfCraftedItems = 0;
+    }
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -46,8 +57,9 @@ public class EventHandler {
                                    (player.experienceLevel / GetExpForEverythingConfig.levelStep * GetExpForEverythingConfig.multiplierForLevelStep));
 
             Reference.countOfBrokenBlocks = 0;
-
         }
+
+        SavedInfo.saveInt(player, "countOfBrokenBlocks", Reference.countOfBrokenBlocks);
     }
 
     @SubscribeEvent
@@ -81,5 +93,7 @@ public class EventHandler {
 
             Reference.countOfCraftedItems = 0;
         }
+
+        SavedInfo.saveInt(player, "countOfCraftedItems", Reference.countOfCraftedItems);
     }
 }
