@@ -25,6 +25,9 @@ public class EventHandler {
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         Reference.countOfBrokenBlocks = SavedInfo.loadInt(event.player, "countOfBrokenBlocks");
         Reference.countOfCraftedItems = SavedInfo.loadInt(event.player, "countOfCraftedItems");
+
+        if (Reference.countOfBrokenBlocks >= GetExpForEverythingConfig.blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
+        if (Reference.countOfCraftedItems >= GetExpForEverythingConfig.itemsNeedToCraft) Reference.countOfCraftedItems = 0;
     }
 
     @SubscribeEvent

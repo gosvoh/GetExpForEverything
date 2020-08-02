@@ -72,8 +72,9 @@ public class GetExpForEverythingConfig {
         public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Reference.MOD_ID)) {
                 ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
-                Reference.countOfCraftedItems = 0;
-                Reference.countOfBrokenBlocks = 0;
+
+                if (Reference.countOfBrokenBlocks >= blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
+                if (Reference.countOfCraftedItems >= itemsNeedToCraft) Reference.countOfCraftedItems = 0;
             }
         }
     }
