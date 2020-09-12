@@ -11,6 +11,7 @@ version = "${mod_version}"
 displayURL = "${mod_url}"
 authors = "${mod_author}"
 updateJSONURL="${mod_updateurl}"
+logoFile="logo.jpeg"
 
 [[dependencies.getexpforeverything]]
 modId = "forge"
