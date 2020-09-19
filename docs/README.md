@@ -10,7 +10,7 @@
 
 ![example2](exemple2.gif)
 
-Thanks to user Quinit from mcbbs.net for these gifs
+Thanks to user Quinit from mcbbs.net for this gifs
 
 ## Installation
 
