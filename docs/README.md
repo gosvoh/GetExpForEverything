@@ -10,6 +10,8 @@
 
 ![example2](exemple2.gif)
 
+Thanks to user Quinit from mcbbs.net for these gifs
+
 ## Installation
 
 * Install Forge
