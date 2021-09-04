@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "getexpforeverything",
+  "version": "${version}",
+  "name": "Get experience for everything!",
+  "description": "This mod allows you get a small amount of experience points by mining and crafting.",
+  "authors": [
+    "gosvoh"
+  ],
+  "contact": {
+    "website": "https://www.curseforge.com/minecraft/mc-mods/get-exp-for-everything",
+    "repo": "https://github.com/gosvoh/GetExpForEverything"
+  },
+  "license": "MIT",
+  "icon": "assets/getexpforeverything/logo.jpeg",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.gosvoh.GetExpForEverything"
+    ],
+    "modmenu": [
+      "com.github.gosvoh.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "getexpforeverything.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}

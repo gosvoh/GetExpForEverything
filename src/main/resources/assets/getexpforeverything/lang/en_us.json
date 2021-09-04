@@ -1,0 +1,13 @@
+{
+  "text.autoconfig.getexpforeverything.option.blocks_need_to_destroy": "Blocks need to destroy",
+  "text.autoconfig.getexpforeverything.option.items_to_craft": "Items need to craft",
+  "text.autoconfig.getexpforeverything.option.base_experience": "Base experience",
+  "text.autoconfig.getexpforeverything.option.multiplier_for_level_step": "Multiplier for level step",
+  "text.autoconfig.getexpforeverything.option.level_step": "Level step",
+  "text.autoconfig.getexpforeverything.option.black_list_blocks": "Blacklisted blocks",
+  "text.autoconfig.getexpforeverything.option.black_list_items": "Blacklisted items",
+  "text.autoconfig.getexpforeverything.option.black_list_block_tags": "Blacklisted block tags",
+  "text.autoconfig.getexpforeverything.option.black_list_item_tags": "Blacklisted item tags",
+  "text.autoconfig.getexpforeverything.option.is_block_whitelist_mode": "Is block whitelist mode",
+  "text.autoconfig.getexpforeverything.option.is_item_whitelist_mode": "Is item whitelist mode"
+}
