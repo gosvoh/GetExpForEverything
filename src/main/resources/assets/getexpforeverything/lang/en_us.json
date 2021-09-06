@@ -1,4 +1,5 @@
 {
+  "text.autoconfig.getexpforeverything.title": "Get Exp For Everything! configuration",
   "text.autoconfig.getexpforeverything.option.blocks_need_to_destroy": "Blocks need to destroy",
   "text.autoconfig.getexpforeverything.option.items_to_craft": "Items need to craft",
   "text.autoconfig.getexpforeverything.option.base_experience": "Base experience",

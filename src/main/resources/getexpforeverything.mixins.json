@@ -4,9 +4,8 @@
   "package": "com.github.gosvoh.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BlockBreakMixin",
     "CraftingMixin"
-  ],
-  "client": [
   ],
   "injectors": {
     "defaultRequire": 1
