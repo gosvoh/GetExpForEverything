@@ -8,8 +8,7 @@ public class GetExpForEverything implements ModInitializer {
     public static final Logger        LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static       Configuration config;
 
-    @Override
-    public void onInitialize() {
+    @Override public void onInitialize() {
         config = Configuration.register();
 
         LOGGER.info(Reference.MOD_NAME + " version " + Reference.VERSION + " by " + Reference.AUTHOR + " started up.");

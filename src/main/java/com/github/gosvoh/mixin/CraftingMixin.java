@@ -6,9 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,14 +25,14 @@ import java.util.Collection;
         Item target = this.getItem();
 
         boolean isFoundSomething = GetExpForEverything.config.getBlacklistedItems().contains(target);
-        /*for (Tag<Item> itemTag : GetExpForEverything.config.getBlacklistedItemTags())
-            if (itemTag.contains(target)) isFoundSomething = true;*/
 
         Collection<Identifier> coll = ItemTags.getTagGroup().getTagsFor(target);
-
-        //TODO getBlacklistedItemTags returns null
-        GetExpForEverything.config.getBlacklistedItemTags().forEach(
-                itemTag -> itemTag.values().forEach(item -> GetExpForEverything.LOGGER.info(Registry.ITEM.getId(item).toString())));
+        for (Identifier identifier : GetExpForEverything.config.getBlacklistedItemTags()) {
+            if (coll.contains(identifier)) {
+                isFoundSomething = true;
+                break;
+            }
+        }
 
         if ((GetExpForEverything.config.is_item_whitelist_mode && !isFoundSomething) ||
             (!GetExpForEverything.config.is_item_whitelist_mode && isFoundSomething)) return;
@@ -52,6 +50,7 @@ import java.util.Collection;
             Reference.countOfCraftedItems = 0;
         }
 
+        // TODO Saving data to NBT
         //SavedInfo.saveInt(player, "countOfCraftedItems", Reference.countOfCraftedItems);
     }
 
