@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +52,13 @@ import java.util.Collection;
             Reference.countOfBrokenBlocks = 0;
         }
 
-        // TODO Saving data to NBT
-        //SavedInfo.saveInt(player, "countOfBrokenBlocks", Reference.countOfBrokenBlocks);
+        ServerPlayerEntity serverPlayerEntity = world.getServer().getPlayerManager().getPlayer(player.getUuid());
+        NbtCompound nbt = new NbtCompound();
+        serverPlayerEntity.writeCustomDataToNbt(nbt);
+        nbt.putInt("countOfBrokenBlocks", Reference.countOfCraftedItems);
+        GetExpForEverything.LOGGER.info(nbt.getInt("countOfBrokenBlocks"));
+        serverPlayerEntity.readCustomDataFromNbt(nbt);
+        serverPlayerEntity.writeCustomDataToNbt(nbt);
+        GetExpForEverything.LOGGER.info(nbt.getInt("countOfBrokenBlocks"));
     }
 }

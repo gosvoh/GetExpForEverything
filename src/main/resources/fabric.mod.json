@@ -15,11 +15,11 @@
   "icon": "assets/getexpforeverything/logo.jpeg",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.github.gosvoh.GetExpForEverything"
-    ],
     "modmenu": [
       "com.github.gosvoh.ModMenuIntegration"
+    ],
+    "main": [
+      "com.github.gosvoh.GetExpForEverything"
     ]
   },
   "mixins": [
@@ -28,6 +28,7 @@
   "depends": {
     "fabricloader": ">=0.11.6",
     "fabric": "*",
-    "minecraft": "1.16.5"
+    "minecraft": "1.16.5",
+    "modmenu": "1.16.16"
   }
 }

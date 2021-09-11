@@ -5,6 +5,9 @@ import com.github.gosvoh.Reference;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -50,8 +53,12 @@ import java.util.Collection;
             Reference.countOfCraftedItems = 0;
         }
 
-        // TODO Saving data to NBT
-        //SavedInfo.saveInt(player, "countOfCraftedItems", Reference.countOfCraftedItems);
+        ServerPlayerEntity serverPlayerEntity = world.getServer().getPlayerManager().getPlayer(player.getUuid());
+        NbtCompound nbt = new NbtCompound();
+
+        serverPlayerEntity.writeCustomDataToNbt(nbt);
+        nbt.putInt("countOfCraftedItems", Reference.countOfCraftedItems);
+        serverPlayerEntity.readCustomDataFromNbt(nbt);
     }
 
 
