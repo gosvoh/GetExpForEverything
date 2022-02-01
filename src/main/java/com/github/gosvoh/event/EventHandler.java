@@ -1,6 +1,5 @@
 package com.github.gosvoh.event;
 
-import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
 import com.github.gosvoh.utils.Reference;
 import com.github.gosvoh.utils.SavedInfo;
@@ -12,16 +11,14 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
-    private static final Logger LOGGER = GetExpForEverything.LOGGER;
-
     @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         Reference.countOfBrokenBlocks = SavedInfo.loadInt(event.getPlayer(), "countOfBrokenBlocks");
         Reference.countOfCraftedItems = SavedInfo.loadInt(event.getPlayer(), "countOfCraftedItems");
+        Reference.countOfPlacedBlocks = SavedInfo.loadInt(event.getPlayer(), "countOfPlacedBlocks");
 
         if (Reference.countOfBrokenBlocks >= GetExpForEverythingConfig.blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
         if (Reference.countOfCraftedItems >= GetExpForEverythingConfig.itemsNeedToCraft) Reference.countOfCraftedItems = 0;
@@ -39,7 +36,10 @@ public class EventHandler {
                 GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString());
 
         for (ResourceLocation resourceLocation : target.getTags())
-            if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString())) isFoundSomething = true;
+            if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString())) {
+                isFoundSomething = true;
+                break;
+            }
 
             if ((GetExpForEverythingConfig.isBlockWhitelistMode && !isFoundSomething) ||
                 (!GetExpForEverythingConfig.isBlockWhitelistMode && isFoundSomething)) return;
@@ -72,7 +72,10 @@ public class EventHandler {
                 GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString());
 
         for (ResourceLocation resourceLocation : target.getTags())
-            if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString())) isFoundSomething = true;
+            if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString())) {
+                isFoundSomething = true;
+                break;
+            }
 
         if ((GetExpForEverythingConfig.isItemWhitelistMode && !isFoundSomething) ||
             (!GetExpForEverythingConfig.isItemWhitelistMode && isFoundSomething)) return;
@@ -92,5 +95,43 @@ public class EventHandler {
         }
 
         SavedInfo.saveInt(player, "countOfCraftedItems", Reference.countOfCraftedItems);
+    }
+
+    @SubscribeEvent
+    public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+        if (!GetExpForEverythingConfig.isPlacingEnabled) return;
+        if (event.getEntity() instanceof Player player) {
+            if (player.level.isClientSide) return;
+            Block target = event.getPlacedBlock().getBlock();
+
+            //noinspection ConstantConditions
+            boolean isFoundSomething =
+                    GetExpForEverythingConfig.blackListBlocksPlace.contains(target.getRegistryName().toString());
+
+            for (ResourceLocation resourceLocation : target.getTags())
+                if (GetExpForEverythingConfig.blackListBlockTagsPlace.contains(resourceLocation.toString())) {
+                    isFoundSomething = true;
+                    break;
+                }
+
+            if ((GetExpForEverythingConfig.isPlacingWhitelistMode && !isFoundSomething) ||
+                (!GetExpForEverythingConfig.isPlacingWhitelistMode && isFoundSomething)) return;
+
+            Reference.countOfPlacedBlocks++;
+
+            if (Reference.countOfPlacedBlocks == GetExpForEverythingConfig.blocksNeedToPlace) {
+
+                if (player.experienceLevel < GetExpForEverythingConfig.levelStep)
+                    player.giveExperiencePoints(GetExpForEverythingConfig.baseExpToGain);
+                else
+                    player.giveExperiencePoints(GetExpForEverythingConfig.baseExpToGain *
+                                                (player.experienceLevel / GetExpForEverythingConfig.levelStep *
+                                                 GetExpForEverythingConfig.multiplierForLevelStep));
+
+                Reference.countOfPlacedBlocks = 0;
+            }
+
+            SavedInfo.saveInt(player, "countOfPlacedBlocks", Reference.countOfPlacedBlocks);
+        }
     }
 }

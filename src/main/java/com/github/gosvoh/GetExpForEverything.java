@@ -2,6 +2,8 @@ package com.github.gosvoh;
 
 import com.github.gosvoh.config.CommonConfig;
 import com.github.gosvoh.utils.Reference;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;

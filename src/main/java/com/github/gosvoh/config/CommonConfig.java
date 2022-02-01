@@ -1,6 +1,7 @@
 package com.github.gosvoh.config;
 
 import com.github.gosvoh.utils.Reference;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -22,6 +23,7 @@ public class CommonConfig {
     }
 
     ForgeConfigSpec.IntValue                            blocksNeedToDestroy;
+    ForgeConfigSpec.IntValue                            blocksNeedToPlace;
     ForgeConfigSpec.IntValue                            baseExpToGain;
     ForgeConfigSpec.IntValue                            multiplierForLevelStep;
     ForgeConfigSpec.IntValue                            levelStep;
@@ -30,8 +32,12 @@ public class CommonConfig {
     ForgeConfigSpec.ConfigValue<List<? extends String>> blackListCraftedItems;
     ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlockTags;
     ForgeConfigSpec.ConfigValue<List<? extends String>> blackListItemTags;
+    ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlocksPlace;
+    ForgeConfigSpec.ConfigValue<List<? extends String>> blackListBlockTagsPlace;
     ForgeConfigSpec.BooleanValue                        isBlockWhitelistMode;
     ForgeConfigSpec.BooleanValue                        isItemWhitelistMode;
+    ForgeConfigSpec.BooleanValue                        isPlacingEnabled;
+    ForgeConfigSpec.BooleanValue                        isPlacingWhitelistMode;
 
     CommonConfig(ForgeConfigSpec.Builder builder) {
         String desc = Reference.MOD_NAME + " mod configuration";
@@ -40,6 +46,9 @@ public class CommonConfig {
 
         desc = "How many blocks you have to destroy to get experience (default: 100)";
         blocksNeedToDestroy = builder.comment(desc).defineInRange("blocks_need_to_destroy", 100, 1, Integer.MAX_VALUE);
+
+        desc = "How many blocks you have to place to get experience (default: 100)";
+        blocksNeedToPlace = builder.comment(desc).defineInRange("blocks_need_to_place", 100, 1, Integer.MAX_VALUE);
 
         desc = "How much experience you will get (default: 1)";
         baseExpToGain = builder.comment(desc).defineInRange("base_experience", 1, 1, 1000);
@@ -92,11 +101,32 @@ public class CommonConfig {
         blackListItemTags =
                 builder.comment(desc).defineList("black_list_block_tags", namesArrayList, o -> o instanceof String);
 
-        desc = "This trigger converts your block blacklists to whitelists if true (default: false)";
+        desc = "Blacklisted blocks, that won't give you experience when placed";
+        namesArrayList = new ArrayList<>();
+        //noinspection ConstantConditions
+        namesArrayList.add(Blocks.DIRT.getRegistryName().toString());
+        desc = desc + "\n(default: " + namesArrayList + ")";
+        blackListBlocksPlace =
+                builder.comment(desc).defineList("black_list_blocks_place", namesArrayList, o -> o instanceof String);
+
+        desc = "Blacklisted block tags, that won't give you experience when placed";
+        namesArrayList = new ArrayList<>();
+        namesArrayList.add("minecraft:dirt");
+        desc = desc + "\n(default: " + namesArrayList + ")";
+        blackListBlockTagsPlace = builder.comment(desc).defineList("black_list_block_tags_place", namesArrayList,
+                o -> o instanceof String);
+
+        desc = "This trigger converts your block blacklist to whitelist if true (default: false)";
         isBlockWhitelistMode = builder.comment(desc).define("is_block_whitelist_mode", false);
 
-        desc = "This trigger converts your item blacklists to whitelists if true (default: false)";
+        desc = "This trigger converts your item blacklist to whitelist if true (default: false)";
         isItemWhitelistMode = builder.comment(desc).define("is_item_whitelist_mode", false);
+
+        desc = "This trigger enables getting experience for placing blocks if true (default: false)";
+        isPlacingEnabled = builder.comment(desc).define("is_placing_enabled", false);
+
+        desc = "This trigger converts your block placing blacklist to whitelist if true (default: false)";
+        isPlacingWhitelistMode = builder.comment(desc).define("is_placing_whitelist_mode", false);
 
         builder.pop();
     }
