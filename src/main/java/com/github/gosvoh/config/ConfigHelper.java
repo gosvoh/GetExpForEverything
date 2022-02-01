@@ -1,13 +1,9 @@
 package com.github.gosvoh.config;
 
-import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.utils.Reference;
 import net.minecraftforge.fml.config.ModConfig;
-import org.apache.logging.log4j.Logger;
 
 public final class ConfigHelper {
-    private static final Logger LOGGER = GetExpForEverything.LOGGER;
-
     public static void bakeClient(final ModConfig config) {
         String prefix = Reference.MOD_ID + ".";
 
@@ -25,12 +21,5 @@ public final class ConfigHelper {
 
         if (Reference.countOfBrokenBlocks >= GetExpForEverythingConfig.blocksNeedToDestroy) Reference.countOfBrokenBlocks = 0;
         if (Reference.countOfCraftedItems >= GetExpForEverythingConfig.itemsNeedToCraft) Reference.countOfCraftedItems = 0;
-
-        LOGGER.debug(Reference.MOD_NAME + " configuration file was changed!");
-    }
-
-    private static void setValueAndSave(final ModConfig modConfig, final String path, final Object newValue) {
-        modConfig.getConfigData().set(path, newValue);
-        modConfig.save();
     }
 }

@@ -1,31 +1,26 @@
 package com.github.gosvoh.utils;
 
-import com.github.gosvoh.GetExpForEverything;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
-@SuppressWarnings("ConstantConditions")
 public class SavedInfo {
 
-    private static final Logger LOGGER = GetExpForEverything.LOGGER;
-
-    public static void saveInt(PlayerEntity player, String key, int value) {
-        CompoundNBT nbt;
+    public static void saveInt(Player player, String key, int value) {
+        CompoundTag nbt;
 
         if (player.getPersistentData().contains(Reference.MOD_ID)) {
-            nbt = (CompoundNBT) player.getPersistentData().get(Reference.MOD_ID);
+            nbt = player.getPersistentData().getCompound(Reference.MOD_ID);
             nbt.putInt(key, value);
         } else {
-            nbt = new CompoundNBT();
+            nbt = new CompoundTag();
             nbt.putInt(key, value);
             player.getPersistentData().put(Reference.MOD_ID, nbt);
         }
     }
 
-    public static int loadInt(PlayerEntity player, String key) {
+    public static int loadInt(Player player, String key) {
         if (player.getPersistentData().contains(Reference.MOD_ID)) {
-            CompoundNBT nbt = (CompoundNBT) player.getPersistentData().get(Reference.MOD_ID);
+            CompoundTag nbt = player.getPersistentData().getCompound(Reference.MOD_ID);
             return nbt.getInt(key);
         }
 

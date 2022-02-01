@@ -1,6 +1,6 @@
 package com.github.gosvoh;
 
-import com.github.gosvoh.config.ConfigHolder;
+import com.github.gosvoh.config.CommonConfig;
 import com.github.gosvoh.utils.Reference;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +17,6 @@ public class GetExpForEverything {
         LOGGER.info(Reference.MOD_NAME + " version " + Reference.VERSION +
                     " by " + Reference.AUTHOR + " started up.");
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC);
     }
 }

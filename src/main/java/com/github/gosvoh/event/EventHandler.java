@@ -4,11 +4,10 @@ import com.github.gosvoh.GetExpForEverything;
 import com.github.gosvoh.config.GetExpForEverythingConfig;
 import com.github.gosvoh.utils.Reference;
 import com.github.gosvoh.utils.SavedInfo;
-import net.minecraft.block.Block;
-import net.minecraft.command.arguments.NBTCompoundTagArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,16 +29,15 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         Block target = event.getState().getBlock();
 
-        if (player.getEntityWorld().isRemote()) return;
-
-        boolean isFoundSomething = false;
+        if (event.getPlayer().level.isClientSide) return;
 
         //noinspection ConstantConditions
-        if (GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString()))
-            isFoundSomething = true;
+        boolean isFoundSomething =
+                GetExpForEverythingConfig.blackListBlocks.contains(target.getRegistryName().toString());
+
         for (ResourceLocation resourceLocation : target.getTags())
             if (GetExpForEverythingConfig.blackListBlockTags.contains(resourceLocation.toString())) isFoundSomething = true;
 
@@ -64,16 +62,15 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onCraft(PlayerEvent.ItemCraftedEvent event) {
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         Item target = event.getCrafting().getItem();
 
-        if (player.getEntityWorld().isRemote) return;
-
-        boolean isFoundSomething = false;
+        if (event.getPlayer().level.isClientSide) return;
 
         //noinspection ConstantConditions
-        if (GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString()))
-            isFoundSomething = true;
+        boolean isFoundSomething =
+                GetExpForEverythingConfig.blackListCraftedItems.contains(target.getRegistryName().toString());
+
         for (ResourceLocation resourceLocation : target.getTags())
             if (GetExpForEverythingConfig.blackListItemTags.contains(resourceLocation.toString())) isFoundSomething = true;
 
