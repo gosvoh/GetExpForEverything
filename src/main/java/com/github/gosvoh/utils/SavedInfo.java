@@ -3,12 +3,9 @@ package com.github.gosvoh.utils;
 import com.github.gosvoh.GetExpForEverything;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("ConstantConditions")
 public class SavedInfo {
-
-    private static final Logger LOGGER = GetExpForEverything.LOGGER;
 
     public static void saveInt(PlayerEntity player, String key, int value) {
         CompoundNBT nbt;
